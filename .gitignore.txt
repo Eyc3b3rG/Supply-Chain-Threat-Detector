@@ -1,0 +1,43 @@
+# Python Bytecode and Cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual Environments and Environment Configs
+venv/
+.env
+.env.*
+
+# Model Files and LLM Assets
+models/
+*.gguf
+*.pt
+*.bin
+*.h5
+
+# Keys and Sensitive Files
+secret.key
+*.pem
+*.crt
+*.key
+
+# Logs and Temporary Files
+*.log
+*.pkl
+*.db
+*.tmp
+
+# Archive and Backup Files
+*.zip
+*.tar.gz
+*.bak
+*.swp
+
+# OS/Editor Specific
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Jupyter and Streamlit Artifacts
+*.ipynb_checkpoints
