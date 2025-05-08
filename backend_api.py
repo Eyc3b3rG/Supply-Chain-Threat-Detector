@@ -3,6 +3,8 @@
 # ---------------------------
 # STEP 1: Load Required Libraries
 # ---------------------------
+from dotenv import load_dotenv
+load_dotenv()
 import os
 import zipfile
 import json
@@ -38,6 +40,13 @@ from langchain_community.document_loaders import TextLoader
 # ---------------------------
 # STEP 2: Initialize Model & Embeddings
 # ---------------------------
+
+# ---------------------------
+# Model Path Configuration
+# ---------------------------
+MODEL_NAME = "tinyllama-1.1b-chat-v1.0.Q4_K_M.gguf"
+MODEL_DIR = os.environ.get("MODEL_DIR", os.path.join(os.path.dirname(__file__), "models"))
+base_model_path = os.path.join(MODEL_DIR, MODEL_NAME)
 
 docs_path = os.path.join(os.path.dirname(__file__), "data")
 index_file = "vector_index.pkl"
@@ -99,7 +108,7 @@ def validate_data_folder(path):
 from transformers import AutoModelForCausalLM, AutoTokenizer
 from peft import PeftModel, PeftConfig 
 
-base_model_path = r"C:\Users\isaia\OneDrive\Documents\Cyber Stealth Solutions\CSS 2021\Sample Problem LLM\models\tinyllama-1.1b-chat-v1.0.Q4_K_M.gguf"
+base_model_path = base_model_path
 
 # Simulated LoRA adapter load - adjust path to point to your LoRA folder
 # Replace with valid adapter if available 
@@ -153,7 +162,7 @@ from langchain_community.llms import LlamaCpp
 try:
     
     llm = LlamaCpp(
-        model_path=r"C:\Users\isaia\OneDrive\Documents\Cyber Stealth Solutions\CSS 2021\Sample Problem LLM\models\tinyllama-1.1b-chat-v1.0.Q4_K_M.gguf",
+        model_path=base_model_path,
         n_ctx=2048,
         n_gpu_layers=20,
         n_batch=32,
@@ -245,4 +254,4 @@ if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="127.0.0.1", port=8000)
     # To run the server, use the command:
-    # uvicorn backend_api:app --host ...
+    # uvicorn backend_api:app --host ..
