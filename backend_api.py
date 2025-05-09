@@ -255,3 +255,58 @@ if __name__ == "__main__":
     uvicorn.run(app, host="127.0.0.1", port=8000)
     # To run the server, use the command:
     # uvicorn backend_api:app --host ..
+# -----------------------------
+# STEP 0: Auto-fetch PDFs and Replace .txt Files
+# -----------------------------
+
+import fitz  # PyMuPDF
+from urllib.parse import urlparse
+
+pdf_sources = {
+    "intel_supply_chain_protections.txt": "https://www.intel.com/content/dam/www/public/us/en/documents/white-papers/platform-resilience-supply-chain-paper.pdf",
+    "microsoft_silk_typhoon_case.txt": "https://www.microsoft.com/en-us/security/blog/wp-content/uploads/2023/06/Analyzing-Silk-Typhoon.pdf",
+    "mitre_system_of_trust.txt": "https://media.defense.gov/2022/Apr/08/2002969022/-1/-1/0/SYSTEM-OF-TRUST-MITRE-WHITEPAPER.PDF",
+    "nist_supply_chain_guidance.txt": "https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-161r1.pdf",
+    "supply_chain_risks.txt": "https://csrc.nist.gov/csrc/media/Publications/sp/800-161/rev-1/draft/documents/sp800-161r1-draft.pdf"
+}
+
+def validate_and_extract_text_from_pdf(url, min_pages=5):
+    response = requests.get(url)
+    if response.status_code != 200:
+        raise ValueError(f"Failed to fetch PDF: {url}")
+
+    with open("temp.pdf", "wb") as f:
+        f.write(response.content)
+
+    doc = fitz.open("temp.pdf")
+    if doc.is_encrypted:
+        raise ValueError("PDF is encrypted or restricted")
+    if len(doc) < min_pages:
+        raise ValueError(f"PDF has only {len(doc)} pages; minimum required is {min_pages}")
+
+    full_text = ""
+    for page in doc:
+        full_text += page.get_text()
+
+    doc.close()
+    os.remove("temp.pdf")
+    return full_text.strip()
+
+def auto_update_txt_from_pdf(data_folder="./data"):
+    if not os.path.exists(data_folder):
+        os.makedirs(data_folder)
+    for txt_name, url in pdf_sources.items():
+        try:
+            print(f"Processing: {url}")
+            content = validate_and_extract_text_from_pdf(url)
+            txt_path = os.path.join(data_folder, txt_name)
+            with open(txt_path, "w", encoding="utf-8") as f:
+                f.write(content)
+            print(f"Updated: {txt_name}")
+        except Exception as e:
+            print(f"Failed to update {txt_name} from {url} — {str(e)}")
+
+# Inject auto-fetch just before vectorstore is built
+if not os.path.exists(index_file):
+    auto_update_txt_from_pdf()
+    build_vectorstore()
