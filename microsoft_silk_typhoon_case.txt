@@ -1,0 +1,1 @@
+Microsoft documented Silk Typhoon, a threat group targeting IT supply chains through credential theft, phishing, and software supply chain compromise to conduct espionage operations across multiple sectors.

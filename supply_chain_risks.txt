@@ -1,0 +1,1 @@
+Supply chain risks include counterfeit components, third-party software vulnerabilities, unauthorized access, data leakage, and vendor dependency. Threat actors exploit weak points in logistics, firmware updates, and cloud service integrations.

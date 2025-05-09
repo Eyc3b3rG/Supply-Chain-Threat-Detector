@@ -1,0 +1,1 @@
+MITRE's System of Trust (SoT) provides a framework for assessing the trustworthiness of suppliers and supply chain elements based on categories such as cybersecurity hygiene, threat intelligence, and operational integrity.

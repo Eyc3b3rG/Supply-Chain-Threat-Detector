@@ -1,0 +1,1 @@
+NIST SP 800-161r1 provides guidance on integrating cyber supply chain risk management (C-SCRM) into enterprise-wide risk management activities using controls and processes throughout the acquisition lifecycle.

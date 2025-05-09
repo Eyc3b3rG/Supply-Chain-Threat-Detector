@@ -1,0 +1,1 @@
+Intel's white paper outlines hardware-based threat detection technologies that can identify and mitigate firmware tampering, device impersonation, and boot-time attacks in the supply chain using built-in chip telemetry.
