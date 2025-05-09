@@ -65,3 +65,15 @@ All documents auto-updated to:
 - `./data/mitre_system_of_trust.txt`
 - `./data/nist_supply_chain_guidance.txt`
 - `./data/supply_chain_risks.txt`
+
+---
+
+## 🖥️ Windows One-Click Launcher (Optional)
+
+To simplify the startup process on Windows:
+
+1. Use the included `launch_app.bat` file
+2. It will:
+   - Open one terminal window for the backend (`backend_api.py`)
+   - Wait a few seconds for it to initialize
+   - Then launch the frontend (`streamlit_app.py`) in a second window
