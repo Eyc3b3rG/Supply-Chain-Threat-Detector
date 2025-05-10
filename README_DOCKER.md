@@ -1,81 +1,105 @@
 # 🚢 Docker Deployment Guide for Supply Chain Threat Detector
 
-This guide provides instructions for building and running the Supply Chain Threat Detector app using Docker.
+This guide provides step-by-step instructions for building and running the Supply Chain Threat Detector locally using Docker on Windows (x86_64).
 
-## 🧰 Prerequisites
+---
 
-Make sure Docker is installed and running on your system:
+## 📥 Prerequisites
 
-- 🪟 **Windows**:
-  - Download Docker Desktop from [https://www.docker.com/products/docker-desktop](https://www.docker.com/products/docker-desktop)
-  - Ensure Docker CLI commands like `docker` and `docker compose` are recognized in your terminal
-  - Restart your computer after installation if needed
+### 1. Install Docker Desktop for Windows (x86_64)
 
-- 🍎 **macOS**: Use Docker Desktop or Homebrew
-- 🐧 **Linux**: Follow your distro’s Docker install instructions
+- Go to: [https://docs.docker.com/desktop/install/windows-install/](https://docs.docker.com/desktop/install/windows-install/)
+- Download the version: **Docker Desktop for Windows – x86_64**
+- Follow the installation wizard.
+- Restart your system if prompted.
 
-To verify Docker is installed:
+### 2. Enable WSL 2 or Hyper-V
+
+Docker Desktop supports both WSL 2 and Hyper-V backends.
+
+We recommend WSL 2 for most setups:
+
+```powershell
+wsl --install
+```
+
+Enable WSL integration in Docker Desktop > Settings > Resources > WSL Integration.
+
+### 3. Verify Docker CLI is working
+
+After installation, open a terminal or PowerShell and run:
 
 ```bash
 docker --version
 docker compose version
 ```
 
-## 📦 Build the Docker Image
+---
 
-From the project root directory (where the `Dockerfile` is located), run:
+## 🚧 Build and Run with Docker
 
-```bash
-docker compose build
-```
-
-## ▶️ Run the Containers
-
-Start the backend and frontend services using:
+### Option 1: Docker Compose (Recommended)
 
 ```bash
-docker compose up
+cd docker_packaging
+docker compose up --build
 ```
 
-To run in detached mode:
+This command:
+- Builds the backend and frontend containers
+- Exposes Streamlit frontend on `http://localhost:8501`
+- Exposes FastAPI backend on `http://localhost:8080`
+
+### Option 2: Build Manually (Advanced)
 
 ```bash
-docker compose up -d
+# Build the image
+docker build -t supply-chain-threat-detector .
+
+# Run the container
+docker run -p 8501:8501 supply-chain-threat-detector
 ```
 
-## 🔍 Access the App
+---
 
-Once the containers are running, access the app via your browser at:
-
-```text
-http://localhost:8501
-```
-
-## 🧪 Stopping and Cleaning Up
-
-To stop the services:
-
-```bash
-docker compose down
-```
-
-To remove volumes and orphan containers:
+## 🧹 Clean Up
 
 ```bash
 docker compose down --volumes --remove-orphans
 ```
 
-## 📁 Project Structure
+---
+
+## 🧪 Test Your Setup
+
+Open your browser and visit:
 
 ```
-.
-├── Dockerfile
-├── docker-compose.yml
-├── .dockerignore
-├── backend_api/
-├── streamlit_app.py
-└── README_DOCKER.md
+http://localhost:8501
 ```
+
+Try submitting a query such as `supply chain risks`. If the app responds with an encrypted answer and sources, you're good to go!
 
 ---
-© 2025 Eyc3b3rG | For demonstration purposes only.
+
+## 📁 Project Structure Reference
+
+- `Dockerfile` – Builds the container image for backend & frontend
+- `docker-compose.yml` – Orchestrates both backend and frontend services
+- `.dockerignore` – Prevents unwanted files from being copied
+- `README_DOCKER.md` – This file
+
+---
+
+## 🛠️ Troubleshooting
+
+- Make sure Docker Desktop is **running** before issuing Docker commands
+- If `docker` is not recognized, log out and log back in or reboot
+- Make sure WSL or Hyper-V is enabled
+
+---
+
+## 📦 Next Steps
+
+✅ Once validated, push your Docker-ready project to GitHub.  
+🏷️ Then, tag a new [release](https://github.com/Eyc3b3rG/Supply-Chain-Threat-Detector/releases) using the latest commit.
