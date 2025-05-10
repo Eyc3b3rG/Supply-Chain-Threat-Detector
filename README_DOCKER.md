@@ -1,89 +1,81 @@
-# 🐳 Docker Deployment Guide: Supply Chain Threat Detector
+# 🚢 Docker Deployment Guide for Supply Chain Threat Detector
 
-This guide explains how to containerize and deploy the Supply Chain Threat Detector using Docker and Docker Compose.
+This guide provides instructions for building and running the Supply Chain Threat Detector app using Docker.
 
----
+## 🧰 Prerequisites
 
-## ✅ Prerequisites
+Make sure Docker is installed and running on your system:
 
-- Docker Desktop installed: https://www.docker.com/products/docker-desktop/
-- (Optional) Docker Compose (included with Docker Desktop)
+- 🪟 **Windows**:
+  - Download Docker Desktop from [https://www.docker.com/products/docker-desktop](https://www.docker.com/products/docker-desktop)
+  - Ensure Docker CLI commands like `docker` and `docker compose` are recognized in your terminal
+  - Restart your computer after installation if needed
 
----
+- 🍎 **macOS**: Use Docker Desktop or Homebrew
+- 🐧 **Linux**: Follow your distro’s Docker install instructions
 
-## 📁 File Structure
+To verify Docker is installed:
+
+```bash
+docker --version
+docker compose version
+```
+
+## 📦 Build the Docker Image
+
+From the project root directory (where the `Dockerfile` is located), run:
+
+```bash
+docker compose build
+```
+
+## ▶️ Run the Containers
+
+Start the backend and frontend services using:
+
+```bash
+docker compose up
+```
+
+To run in detached mode:
+
+```bash
+docker compose up -d
+```
+
+## 🔍 Access the App
+
+Once the containers are running, access the app via your browser at:
+
+```text
+http://localhost:8501
+```
+
+## 🧪 Stopping and Cleaning Up
+
+To stop the services:
+
+```bash
+docker compose down
+```
+
+To remove volumes and orphan containers:
+
+```bash
+docker compose down --volumes --remove-orphans
+```
+
+## 📁 Project Structure
 
 ```
 .
 ├── Dockerfile
-├── .dockerignore
 ├── docker-compose.yml
-├── backend_api.py
+├── .dockerignore
+├── backend_api/
 ├── streamlit_app.py
-├── requirements.txt
-└── data/
+└── README_DOCKER.md
 ```
 
 ---
-
-## 🧱 Option 1: Single Container (Backend + Frontend in One Image)
-
-### 🔨 Build the Docker Image
-
-```bash
-docker build -t supply-chain-threat-detector .
-```
-
-### ▶️ Run the Container
-
-```bash
-docker run -p 8501:8501 -p 8080:8080 supply-chain-threat-detector
-```
-
-### 🌐 Access the App
-
-- Streamlit UI: http://localhost:8501
-- FastAPI Swagger Docs: http://localhost:8080/docs
-
----
-
-## 🧩 Option 2: Docker Compose (Backend & Frontend as Separate Services)
-
-### ▶️ Start with Compose
-
-```bash
-docker-compose up --build
-```
-
-This builds and runs:
-- `backend` on port 8080
-- `frontend` (Streamlit) on port 8501
-
-### 🛑 Stop Containers
-
-```bash
-docker-compose down
-```
-
----
-
-## 🔐 Notes
-
-- The app runs fully offline with no external API calls.
-- If using `.env` for secrets, add it to `.dockerignore`.
-
----
-
-## 🧼 Clean Up
-
-```bash
-docker system prune -a
-```
-
----
-
-## 📦 Ready for Submission
-
-Ensure that your `.gguf` model and large files (if any) are either ignored or separately documented in your submission.
-
----
+© 2025 Eyc3b3rG | For demonstration purposes only.
