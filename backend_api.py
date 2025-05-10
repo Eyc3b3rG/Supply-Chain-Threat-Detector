@@ -209,8 +209,6 @@ def graph_rag_query(query: str):
     result = qa_chain.run({"context": combined_context, "question": query})
     return result, docs
 
-answer, source_docs = graph_rag_query(request.query)
-sources = [doc.metadata.get("source", "unknown") for doc in source_docs]
 
 
 # -------------------------------------
