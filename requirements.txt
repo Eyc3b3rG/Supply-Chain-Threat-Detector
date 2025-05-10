@@ -12,3 +12,4 @@ torch==2.7.0
 sentence-transformers==4.1.0
 PyMuPDF==1.23.22
 pyPDF2==3.0.0
+llama-cpp-python==0.2.11
