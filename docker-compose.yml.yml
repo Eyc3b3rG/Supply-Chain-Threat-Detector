@@ -9,5 +9,18 @@ services:
     ports:
       - "8080:8080"
     volumes:
-      - ./models:/app/models   # Mount models folder into container
+      - .:/app
+    restart: always
     command: ["python", "backend_api.py"]
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: supply_chain_threat_frontend
+    ports:
+      - "8501:8501"
+    volumes:
+      - .:/app
+    restart: always
+    command: ["streamlit", "run", "streamlit_app.py", "--server.port=8501", "--server.address=0.0.0.0"]
