@@ -1,27 +1,34 @@
 import streamlit as st
 import requests
 
-st.title("Supply Chain Threat Detector")
-st.write("Detect potential threats in your supply chain using an AI-powered LLM + RAG engine.")
+# Streamlit UI Configuration
+st.set_page_config(page_title="Supply Chain Threat Detector", layout="wide")
+st.title("🔗 AI-Powered Supply Chain Threat Detector")
+st.markdown("Enter a cybersecurity query or concern related to supply chains:")
 
-query = st.text_input("Enter your supply chain query:")
+# Input form
+query = st.text_input("Enter your supply chain security concern or question:", "")
 
-if st.button("Submit Query") and query:
-    try:
-        response = requests.post("http://localhost:8080/detect", json={"query": query}, timeout=15)
-        response.raise_for_status()
-        data = response.json()
+if st.button("Analyze"):
+    if not query:
+        st.warning("Please enter a query before analyzing.")
+    else:
+        # Use the Docker service name instead of localhost for backend API
+        backend_url = "http://backend:8080/detect"
 
-        st.success("Encrypted Answer:")
-        st.code(data["answer_encrypted"])
+        try:
+            response = requests.post(backend_url, json={"query": query}, timeout=15)
 
-        st.success("Sources Used:")
-        st.json(data["sources"])
+            if response.status_code == 200:
+                result = response.json()
+                st.success("Threat Analysis Completed:")
+                st.markdown(f"**Query:** {result.get('query')}")
+                st.markdown(f"**Findings:** {result.get('result')}")
+                st.markdown(f"**Encrypted Output:** `{result.get('encrypted_output')}`")
+            else:
+                st.error(f"Error from backend: {response.status_code} - {response.text}")
 
-    except requests.exceptions.ConnectionError:
-        st.error("🚫 Could not connect to the backend at http://localhost:8080.\n\nMake sure it's running.")
-    except requests.exceptions.Timeout:
-        st.error("⏳ The request timed out. Try again later.")
-    except requests.exceptions.HTTPError as e:
-        st.error(f"❌ Server error: {e.response.status_code} – {e.response.text}")
+        except requests.exceptions.RequestException as e:
+            st.error(f"Error connecting to backend API: {e}")
+
 
