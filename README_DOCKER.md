@@ -1,94 +1,87 @@
-# 🚢 Dockerized Deployment – Supply Chain Threat Detector
+# 🐳 Docker Setup for Supply Chain Threat Detector
 
-This project uses Docker to containerize both the **FastAPI backend** and **Streamlit frontend**.
-
----
-
-## 📁 Project Structure
-
-```
-.
-├── backend_api.py
-├── streamlit_app.py
-├── requirements.txt
-├── Dockerfile
-├── docker-compose.yml
-├── rebuild_docker.bat
-└── README_DOCKER.md
-```
+This guide explains how to build, test, and deploy the Supply Chain Threat Detector application using Docker.
 
 ---
 
-## 🚀 Quick Start (Local Docker Build)
+## 📦 Local Build and Run Instructions
 
-### 🔁 Rebuild from Scratch
-Run the `.bat` script (for Windows users):
+### Build and Start Docker Containers
+
+Run the following command from the project root to build and launch the containers:
 
 ```bash
-./rebuild_docker.bat
-```
-
-This will:
-1. Stop existing containers
-2. Rebuild images using `docker-compose`
-3. Start both backend and frontend services
-
----
-
-## 🧪 Manual Docker Commands
-
-### Build & Run via Docker Compose
-
-```bash
-docker-compose down
 docker-compose up --build
 ```
 
----
+Or double-click the provided script:
 
-## 🌐 Accessing the App
-
-- Frontend (Streamlit): [http://localhost:8501](http://localhost:8501)
-- Backend (FastAPI): [http://localhost:8080/docs](http://localhost:8080/docs)
-
----
-
-## ⚙️ Environment & Model Setup
-
-### Models
-To use local models like TinyLLaMA, ensure your `models/` folder is **excluded** from `.dockerignore` and structured like:
-
-```
-models/
-└── tinylama-1.1b-chat-v1.0.Q4_K_M.gguf
+```bash
+rebuild_docker.bat
 ```
 
----
+### Access the Application
 
-## 📦 Notes
-
-- `llama-cpp-python` and `faiss-cpu` are installed and pinned in `requirements.txt`.
-- Dependencies are resolved using pip with `--no-cache-dir` to keep builds lean.
-- Compatibility ensured for `langchain==0.1.17` and `langchain-community==0.0.36`.
+- **Frontend (Streamlit)**: [http://localhost:8501](http://localhost:8501)
+- **Backend (FastAPI)**: [http://localhost:8080/docs](http://localhost:8080/docs)
 
 ---
 
-## 🧼 .dockerignore Example
+## 🔐 Environment and Model Setup
 
+Ensure the following before running:
+
+- A `.env` file in the root directory if sensitive variables are needed.
+- Preload or mount your `./models` and `./data` folders with required `.gguf` and `.txt` files respectively.
+
+---
+
+## 🚀 Publishing Docker Image to Docker Hub
+
+### Step 1: Tag the Local Image
+
+```bash
+docker tag supply-chain-threat-detector eyc3b3rg/supply-chain-threat-detector:latest
 ```
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
-*.db
-.env
-models/
+
+### Step 2: Push the Tagged Image
+
+```bash
+docker push eyc3b3rg/supply-chain-threat-detector:latest
+```
+
+Ensure you are authenticated using Docker CLI:
+
+```bash
+docker login -u eyc3b3rg
+# Use your Docker Hub Personal Access Token (PAT) as the password
+```
+
+View the public image:  
+👉 https://hub.docker.com/r/eyc3b3rg/supply-chain-threat-detector
+
+---
+
+## 📁 Additional Notes
+
+- Use `.dockerignore` to exclude unnecessary files from the Docker build context.
+- The backend image supports `llama-cpp-python` and `faiss-cpu`.
+- Streamlit is hosted at port `8501`, FastAPI at port `8080`.
+
+---
+
+## 🛠 Maintenance
+
+To clean up and rebuild from scratch:
+
+```bash
+docker-compose down
+docker system prune -af
+rebuild_docker.bat
 ```
 
 ---
 
-## 🛠 Troubleshooting
+*Last updated: Finalized Docker image for external review.*
 
-- ❗ If the backend fails to find a model path, verify `models/` exists inside the container (`docker exec -it container_name ls /app/models`)
-- ✅ Ensure `llama-cpp-python` is installed and compatible with your system's CPU
 
