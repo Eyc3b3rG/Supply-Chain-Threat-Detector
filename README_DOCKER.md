@@ -1,83 +1,94 @@
-# 🐳 Docker Deployment: Supply Chain Threat Detector
+# 🚢 Dockerized Deployment – Supply Chain Threat Detector
 
-This repository contains a containerized AI-powered application that detects cybersecurity risks in supply chain data using LLMs and embeddings.
+This project uses Docker to containerize both the **FastAPI backend** and **Streamlit frontend**.
 
 ---
 
-## 📁 Pre-Setup Instructions
+## 📁 Project Structure
 
-### ✅ 1. Place Your LLM Model in the `models/` Folder
-Ensure the `models/` folder exists and contains your `.gguf` LLM file:
-
-```bash
-mkdir -p models
-mv tinyllama-1.1b-chat-v1.0.Q4_K_M.gguf models/
 ```
-
-> If you're using `.dockerignore`, make sure `models/` is **not excluded**.
-
----
-
-### ✅ 2. Environment Variables (`.env`)
-(Optional) Create a `.env` file if your app references environment-specific paths:
-
-```env
-MODEL_PATH=models/tinyllama-1.1b-chat-v1.0.Q4_K_M.gguf
-VECTOR_STORE=vector_index.pkl
+.
+├── backend_api.py
+├── streamlit_app.py
+├── requirements.txt
+├── Dockerfile
+├── docker-compose.yml
+├── rebuild_docker.bat
+└── README_DOCKER.md
 ```
 
 ---
 
-## 🚀 Step-by-Step Docker Instructions
+## 🚀 Quick Start (Local Docker Build)
 
-### 🏗️ Build & Launch the Application
-
-From the root of your project (where `docker-compose.yml` is located):
+### 🔁 Rebuild from Scratch
+Run the `.bat` script (for Windows users):
 
 ```bash
-docker-compose up --build
+./rebuild_docker.bat
 ```
 
 This will:
-- Build the **backend** (FastAPI) on `http://localhost:8080`
-- Launch the **frontend** (Streamlit) on `http://localhost:8501`
+1. Stop existing containers
+2. Rebuild images using `docker-compose`
+3. Start both backend and frontend services
 
 ---
 
-### 🌐 Access the App in Your Browser
+## 🧪 Manual Docker Commands
 
-- Frontend (Streamlit): http://localhost:8501
-- Backend (FastAPI): http://localhost:8080
-- Swagger API Docs: http://localhost:8080/docs
-
----
-
-### 🛑 To Stop the App
+### Build & Run via Docker Compose
 
 ```bash
 docker-compose down
+docker-compose up --build
 ```
 
 ---
 
-## ⚡ One-Click Rebuild (Windows)
+## 🌐 Accessing the App
 
-For convenience, Windows users can use the included `rebuild_docker.bat`:
-
-```cmd
-rebuild_docker.bat
-```
-
-This script:
-- Stops existing containers
-- Rebuilds Docker images with code and dependency changes
-- Relaunches the services cleanly
-
-> Double-click it from File Explorer or run from a Windows Command Prompt.
+- Frontend (Streamlit): [http://localhost:8501](http://localhost:8501)
+- Backend (FastAPI): [http://localhost:8080/docs](http://localhost:8080/docs)
 
 ---
 
-## 📝 Notes
+## ⚙️ Environment & Model Setup
 
-- Always use `localhost` in the browser (not `0.0.0.0`)
-- Make sure the backend URL in `streamlit_app.py` is set to: `http://backend:8080/detect` (not `localhost`)
+### Models
+To use local models like TinyLLaMA, ensure your `models/` folder is **excluded** from `.dockerignore` and structured like:
+
+```
+models/
+└── tinylama-1.1b-chat-v1.0.Q4_K_M.gguf
+```
+
+---
+
+## 📦 Notes
+
+- `llama-cpp-python` and `faiss-cpu` are installed and pinned in `requirements.txt`.
+- Dependencies are resolved using pip with `--no-cache-dir` to keep builds lean.
+- Compatibility ensured for `langchain==0.1.17` and `langchain-community==0.0.36`.
+
+---
+
+## 🧼 .dockerignore Example
+
+```
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.db
+.env
+models/
+```
+
+---
+
+## 🛠 Troubleshooting
+
+- ❗ If the backend fails to find a model path, verify `models/` exists inside the container (`docker exec -it container_name ls /app/models`)
+- ✅ Ensure `llama-cpp-python` is installed and compatible with your system's CPU
+
