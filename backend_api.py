@@ -215,6 +215,13 @@ def graph_rag_query(query: str):
 # STEP 7: API Setup
 # -----------------------------------------
 app = FastAPI()
+@app.get("/")
+def root():
+    return {"message": "Supply Chain Threat Detector API is running."}
+
+@app.get("/health")
+def health_check():
+    return {"status": "ok"}
 
 # Supply Chain Threat Intelligence Sources 
 
