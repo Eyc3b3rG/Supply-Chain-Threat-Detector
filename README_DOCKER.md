@@ -1,37 +1,58 @@
-## 🐳 Running the Supply Chain Threat Detector with Docker
+# 🐳 Docker Deployment: Supply Chain Threat Detector
 
-This application includes both a **backend** (FastAPI) and a **frontend** (Streamlit) service, orchestrated using Docker Compose.
+This repository contains a containerized AI-powered application that detects cybersecurity risks in supply chain data using LLMs and embeddings.
 
 ---
 
-### 📦 Step 1: Build and Start the Services
+## 📁 Pre-Setup Instructions
 
-From the project root directory (where `docker-compose.yml` is located), run:
+### ✅ 1. Place Your LLM Model in the `models/` Folder
+Ensure the `models/` folder exists and contains your `.gguf` LLM file:
+
+```bash
+mkdir -p models
+mv tinyllama-1.1b-chat-v1.0.Q4_K_M.gguf models/
+```
+
+> If you're using `.dockerignore`, make sure `models/` is **not excluded**.
+
+---
+
+### ✅ 2. Environment Variables (`.env`)
+(Optional) Create a `.env` file if your app references environment-specific paths:
+
+```env
+MODEL_PATH=models/tinyllama-1.1b-chat-v1.0.Q4_K_M.gguf
+VECTOR_STORE=vector_index.pkl
+```
+
+---
+
+## 🚀 Step-by-Step Docker Instructions
+
+### 🏗️ Build & Launch the Application
+
+From the root of your project (where `docker-compose.yml` is located):
 
 ```bash
 docker-compose up --build
 ```
 
 This will:
-- Build and run the FastAPI backend at `http://localhost:8080`
-- Build and run the Streamlit frontend at `http://localhost:8501`
+- Build the **backend** (FastAPI) on `http://localhost:8080`
+- Launch the **frontend** (Streamlit) on `http://localhost:8501`
 
 ---
 
-### 🌐 Access the Application
+### 🌐 Access the App in Your Browser
 
-- **Frontend UI (Streamlit)**: [http://localhost:8501](http://localhost:8501)
-- **Backend API (FastAPI)**: [http://localhost:8080](http://localhost:8080)
-
-You should see confirmation messages like:
-- `Uvicorn running on http://0.0.0.0:8080`
-- `You can now view your Streamlit app in your browser.`
+- Frontend (Streamlit): http://localhost:8501
+- Backend (FastAPI): http://localhost:8080
+- Swagger API Docs: http://localhost:8080/docs
 
 ---
 
-### 🛑 Stop the Services
-
-To stop all containers, press `Ctrl+C` in the terminal or run:
+### 🛑 To Stop the App
 
 ```bash
 docker-compose down
@@ -39,9 +60,24 @@ docker-compose down
 
 ---
 
-### 📝 Notes
+## ⚡ One-Click Rebuild (Windows)
 
-- Ensure your `.env` and `models/` folder are correctly included or referenced.
-- Avoid using `0.0.0.0` in the browser URL — use `localhost` instead.
+For convenience, Windows users can use the included `rebuild_docker.bat`:
+
+```cmd
+rebuild_docker.bat
+```
+
+This script:
+- Stops existing containers
+- Rebuilds Docker images with code and dependency changes
+- Relaunches the services cleanly
+
+> Double-click it from File Explorer or run from a Windows Command Prompt.
 
 ---
+
+## 📝 Notes
+
+- Always use `localhost` in the browser (not `0.0.0.0`)
+- Make sure the backend URL in `streamlit_app.py` is set to: `http://backend:8080/detect` (not `localhost`)
