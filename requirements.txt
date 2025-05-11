@@ -10,3 +10,4 @@ pypdf
 scikit-learn
 nltk
 sentence-transformers
+faiss-cpu
