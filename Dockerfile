@@ -1,20 +1,20 @@
-
-# Use official Python image
+# Use official Python slim image
 FROM python:3.11-slim
 
-# Set working directory in container
+# Set working directory inside the container
 WORKDIR /app
 
-# Copy requirements.txt into the container
-COPY ./requirements.txt ./requirements.txt
-
-# Install system dependencies and Python libraries
+# Copy requirements and install dependencies
+COPY requirements.txt .
 RUN apt-get update && \
     apt-get install -y build-essential cmake libopenblas-dev git curl && \
     pip install --no-cache-dir -r requirements.txt
 
-# Copy all source code into the container
+# Copy project files into container
 COPY . .
 
-# Run backend API on container start
+# Expose port (optional, useful for FastAPI)
+EXPOSE 8080
+
+# Run backend API
 CMD ["python", "backend_api.py"]
