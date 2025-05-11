@@ -1,6 +1,62 @@
+# Python artifacts
 __pycache__/
-*.pyc
-*.pyo
+*.py[cod]
 *.pyd
+*.pyo
+
+# Logs and local runtime
+*.log
 *.db
+*.sqlite3
+
+# Environment files
 .env
+.env.*
+
+# System files
+.DS_Store
+Thumbs.db
+
+# OS-generated files
+ehthumbs.db
+Icon?
+desktop.ini
+
+# Docker + Git
+Dockerfile*
+.dockerignore
+.git
+.gitignore
+*.swp
+
+# IDE/editor folders
+.vscode/
+.idea/
+*.code-workspace
+
+# Cached packages and build folders
+*.egg-info/
+.eggs/
+build/
+dist/
+.cache/
+.venv/
+venv/
+pip-wheel-metadata/
+
+# Models and large files (you may uncomment if these aren't needed inside the container)
+models/
+*.gguf
+*.bin
+*.ckpt
+*.pt
+*.pth
+*.onnx
+*.mp4
+*.zip
+*.tar.gz
+
+# Optional: ignore bat scripts and docs from container build context
+*.bat
+README*.md
+docs/
