@@ -1,20 +1,29 @@
-# Use official Python slim image
+# Use a more complete base to support compilation
 FROM python:3.11-slim
 
-# Set working directory inside the container
+# Set working directory
 WORKDIR /app
 
-# Copy requirements and install dependencies
+# Install system dependencies required by llama-cpp-python
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    cmake \
+    git \
+    curl \
+    libopenblas-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy requirements and install Python dependencies
 COPY requirements.txt .
-RUN apt-get update && \
-    apt-get install -y build-essential cmake libopenblas-dev git curl && \
+RUN pip install --upgrade pip && \
     pip install --no-cache-dir -r requirements.txt
 
-# Copy project files into container
+# Copy the rest of the project
 COPY . .
 
-# Expose port (optional, useful for FastAPI)
+# Expose the backend API port
 EXPOSE 8080
 
-# Run backend API
+# Run the backend
 CMD ["python", "backend_api.py"]
+
