@@ -1,17 +1,27 @@
-fastapi
-uvicorn
-python-dotenv
-streamlit
-requests
-faiss-cpu
-pypdf2
-cryptography
-huggingface-hub
-transformers
-peft
-langchain
-langchain-community
-langchain-core
-llama-cpp-python
-sentence-transformers
-pymupdf
+# Core backend dependencies
+fastapi==0.110.0
+uvicorn==0.29.0
+
+# Frontend
+streamlit==1.33.0
+
+# LLM & embedding models
+langchain==0.1.17
+llama-cpp-python==0.2.64
+
+# Document loading
+langchain-community==0.0.35
+
+# Transformers and model utilities
+transformers==4.41.2
+sentence-transformers==2.6.1
+huggingface-hub==0.23.2
+
+# Vector database
+faiss-cpu==1.8.0
+
+# General dependencies
+requests==2.32.3
+numpy==1.26.4
+pydantic==2.7.1
+python-dotenv==1.0.1
